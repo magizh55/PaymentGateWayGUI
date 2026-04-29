@@ -1,0 +1,68 @@
+@startuml
+
+'======================
+' Strategy Interface
+'======================
+interface PaymentStrategy {
+    + pay(amount: double): String
+}
+
+'======================
+' Concrete Strategies
+'======================
+class CreditCardPayment {
+    + pay(amount: double): String
+}
+
+class UPIPayment {
+    + pay(amount: double): String
+}
+
+class WalletPayment {
+    + pay(amount: double): String
+}
+
+PaymentStrategy <|.. CreditCardPayment
+PaymentStrategy <|.. UPIPayment
+PaymentStrategy <|.. WalletPayment
+
+'======================
+' Context Class
+'======================
+class PaymentGateway {
+    - strategy: PaymentStrategy
+    + setStrategy(strategy: PaymentStrategy): void
+    + processPayment(amount: double): String
+}
+
+PaymentGateway --> PaymentStrategy
+
+'======================
+' GUI Class
+'======================
+class PaymentGatewayGUI {
+    - paymentMethods: JComboBox
+    - amountField: JTextField
+    - payButton: JButton
+    - resultArea: JTextArea
+    - gateway: PaymentGateway
+
+    + actionPerformed(e: ActionEvent): void
+}
+
+PaymentGatewayGUI --> PaymentGateway
+
+'======================
+' Testing Class
+'======================
+class PaymentGatewayTest {
+    + testCreditCardPayment()
+    + testUPIPayment()
+    + testWalletPayment()
+    + testInvalidAmount()
+}
+
+PaymentGatewayTest --> PaymentGateway
+PaymentGatewayTest --> PaymentStrategy
+
+@enduml
